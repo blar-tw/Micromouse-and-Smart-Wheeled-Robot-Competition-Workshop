@@ -27,13 +27,31 @@ rather than the workshop's teaching version. Same A / B / A+B controls.
 
 | Setting | Meaning |
 |---------|---------|
-| `KP`, `KI`, `KD` | PID gains (defaults 0.35 / 0 / 4.0 — conservative starting point) |
-| `SPEED_MAX`, `SPEED_MIN` | straight-line vs. curve base speed |
+| `KP`, `KI`, `KD` | PID gains (defaults 0.25 / 0 / 1.0 — field-tested starting point, see log below) |
+| `SPEED_MAX`, `SPEED_MIN` | straight-line vs. curve base speed (defaults 300 / 180) |
 | `SPEED_LOST` | speed while searching for a lost line |
+| `CORR_MAX` | clamp on a single steering correction — prevents violent full-speed swings (and the current spike they cause) |
 | `LINE_IS_WHITE` | `True` for white line on black; set `False` for black line on white |
 | `LINE_THRESHOLD` | how bright (0–1000) counts as "seeing the line" |
 | `LOST_TIMEOUT` | ms without a line before auto-stop |
 | `FINISH_COUNT` | right-side markers to count before stopping (start + finish = 2) |
+
+## Field log (real-track debugging record)
+
+**2026-07-14 — Pressing B rebooted the micro:bit.** Button A (300 ms nudge) was fine; B
+(continuous drive) browned out the shared battery rail and reset the micro:bit. Causes: speeds too
+high for the battery + the D-term spiking to full scale the instant the line was lost (`pos` jumps
+to ±2000 → near ±1000 wheel command → stall-level current). Fixes: lowered `SPEED_MAX/MIN/LOST`
+to 300/180/150, added the `CORR_MAX = 500` clamp, and D is now zeroed while the line is lost.
+
+**2026-07-14 — Car ran but vibrated left–right constantly.** Cause: **KD was ~11× too hot due to a
+unit-scale mistake.** This program's position scale is −2000..+2000 (1000 per sensor spacing) vs the
+workshop's 1..5 (1 per spacing), so gains must be ~1000× smaller to be equivalent. `KD = 4.0` here
+equals ~4000 in workshop units (theirs: 350). The D-term amplified per-loop sensor noise into rapid
+alternating corrections that slammed the `CORR_MAX` clamp — bang-bang steering = vibration.
+(Matches the NOTE.md symptom table: "twitchy/jittery → KD too high".) Fixes: `KP` 0.35 → **0.25**
+(equivalent to the workshop's proven 250), `KD` 4.0 → **1.0** (~3× workshop damping, reasonable with
+the low-pass filter). Rule of thumb recorded in the code: **on this scale, KD +1 ≈ workshop +1000.**
 
 ## Tuning order
 

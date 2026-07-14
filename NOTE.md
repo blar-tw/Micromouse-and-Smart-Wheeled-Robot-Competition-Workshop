@@ -31,8 +31,10 @@ linpos就是LP
 
 比例差分回授控制 馬達速度控制
 PD控制器
-
-
+KPKD 拿來設定馬達速度 左右輪速度 左減右加 pdvalue=delta pwm
+假設LP在正中央所以一加一剪 perror=0 derror=0 pdvalue=0
+不要超過極限值
+調整參數主要是改PD
 
 ---
 

@@ -20,12 +20,14 @@
 #       VS Code 本機顯示紅字是正常的。
 
 # ================= 可調參數（全部集中在這） =================
-KP = 0.35            # 比例增益：修正力道（0.2~0.6 之間試）
+KP = 0.25            # 比例增益：修正力道（等效老師版 KP=250；0.15~0.4 之間試）
 KI = 0.0             # 積分增益：競速通常設 0；車子總是偏一邊才加一點點（如 0.001）
-KD = 4.0             # 微分增益：阻尼，通常是 KP 的 10~15 倍（相對這個刻度）
-SPEED_MAX = 450      # 直線基礎速度（上限 1000）
-SPEED_MIN = 220      # 彎道最低基礎速度
-SPEED_LOST = 180     # 斷線找線時的速度
+KD = 1.0             # 微分增益：阻尼（等效老師版 KD 的 3 倍；抖動就降、過彎甩尾就加）
+                     # ⚠️ 這個刻度下 KD 每 +1 = 老師版 +1000，動一點點就差很多
+SPEED_MAX = 300      # 直線基礎速度（先保守，確定不重開機再往上加）
+SPEED_MIN = 180      # 彎道最低基礎速度
+SPEED_LOST = 150     # 斷線找線時的速度
+CORR_MAX = 500       # 單次修正上限：避免瞬間硬甩、電流爆衝把 micro:bit 拉重開
 I_MAX = 200000       # 積分上限（anti-windup）
 LINE_IS_WHITE = True # True = 黑底白線；白底黑線改 False
 LINE_THRESHOLD = 200 # 歸一化 0~1000 後，多亮才算「看得到線」
@@ -108,16 +110,18 @@ def read_sensors_raw_calibrate():
 def pid_drive(on_line):
     global last_error, integral, d_filt
     error = pos                              # 目標 = 0（線在正中央）
-    integral = Math.constrain(integral + error, -I_MAX, I_MAX)
-    d_raw = error - last_error
-    d_filt = d_filt * 0.6 + d_raw * 0.4      # D 項低通濾波
-    last_error = error
-    correction = KP * error + KI * integral + KD * d_filt
-    # 自適應速度：偏差越大跑越慢（彎道減速、直線全速）
     if on_line:
+        integral = Math.constrain(integral + error, -I_MAX, I_MAX)
+        d_raw = error - last_error
+        d_filt = d_filt * 0.6 + d_raw * 0.4  # D 項低通濾波
+        last_error = error                   # 只在看得到線時更新，避免重新找到線時 D 爆衝
+        # 自適應速度：偏差越大跑越慢（彎道減速、直線全速）
         base = SPEED_MAX - (SPEED_MAX - SPEED_MIN) * abs(error) / 2000
     else:
+        d_filt = 0                           # 斷線瞬間 pos 會跳到 ±2000，關掉 D 避免馬達硬甩爆電流
         base = SPEED_LOST
+    correction = KP * error + KI * integral + KD * d_filt
+    correction = Math.constrain(correction, -CORR_MAX, CORR_MAX)
     SmartCar.set_motor(SmartCar.MotorList.左輪,
                        Math.constrain(base + correction, -1000, 1000))
     SmartCar.set_motor(SmartCar.MotorList.右輪,
