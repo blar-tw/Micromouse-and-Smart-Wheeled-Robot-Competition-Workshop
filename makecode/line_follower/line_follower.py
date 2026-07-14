@@ -24,7 +24,7 @@
 最小值 = [5000, 5000, 5000, 5000, 5000, 5000, 5000]
 目標最大值 = 4000
 目標最小值 = 1
-bassSPD = 350
+bassSPD = 400 #350 original
 LinePOS = 0
 pError = 0
 pErrorOld = 0

@@ -36,6 +36,15 @@ KPKD 拿來設定馬達速度 左右輪速度 左減右加 pdvalue=delta pwm
 不要超過極限值
 調整參數主要是改PD
 
+in arduino
+pwm is o to 255(max)
+kp kd 
+調整經驗
+kp小 kd0 慢慢調到極限 車子失控
+kp max就知道了
+KP consted KD越大 KP越小
+ir是紅外線數值 為了車子定位
+
 ---
 
 # PD 循線調參數筆記
