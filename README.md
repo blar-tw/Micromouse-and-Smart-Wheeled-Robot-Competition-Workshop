@@ -26,13 +26,20 @@ and STEM education. It uses a **dual-platform development architecture**:
 | Other | Passive buzzer, 2× LED, 2× buttons |
 | Power | 14500 Li-ion battery, TP4056 charging IC, MCP1826 LDO (3.3V) |
 
+## Two ways to program it
+
+- **[Way 1 — MakeCode](makecode/README.md)** (block-based, micro:bit) — the beginner path.
+- **[Way 2 — Arduino IDE](arduino/README.md)** (text-based, direct to the ATSAMD21G18 MCU) — the advanced path.
+
+Both run the same line-following logic (calibrate → normalize → weighted position → PD control).
+
 ## Repository Structure
 
 ```
 ├── slides/      Workshop presentation (PDF)
 ├── docs/        Hardware notes and I2C command table
-├── arduino/     Arduino IDE line-following sample (PD control)
-└── makecode/    MakeCode extension blocks and example links
+├── arduino/     Way 2 — Arduino IDE line-following sketch + guide
+└── makecode/    Way 1 — MakeCode line follower + guide
 ```
 
 ## Quick Links
