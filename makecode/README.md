@@ -59,6 +59,31 @@ Two versions of the same program — pick one (Blocks/JavaScript/Python are thre
 
 Then **Download** to the micro:bit.
 
+### Step 2b — Competition-style algorithm (optional upgrade)
+
+[`my_follower.py`](my_follower.py) is a from-scratch algorithm using techniques common in
+line-follower racing. Same A/B/A+B controls as the workshop version. What it adds:
+
+| Technique | Why |
+|-----------|-----|
+| Read all 7 sensors in **one** I2C transaction (`get_all_ir_values`) | 7× fewer bus transactions → faster control loop |
+| Position scale −2000..+2000 (Pololu `readLine` convention) | finer resolution than 5 discrete weights |
+| **Line-loss memory**: report full-scale position toward the last-seen side | PD naturally steers back to reacquire the line |
+| Full **PID** with anti-windup (KI defaults to 0) | add tiny KI only if the car consistently hugs one side |
+| **Adaptive speed**: slow in curves, full speed on straights | the main trick for fast lap times |
+| D-term low-pass filter | less jitter from sensor noise |
+| Lost-line timeout auto-stop (1.2 s) | safety |
+| Marker detection with **hysteresis** (>600 on, <400 off) | no double-counting from flicker |
+| Pressing B resets counters/PID state | workshop version would instantly stop on a second run |
+
+All tunables sit in the config block at the top (`KP/KI/KD`, `SPEED_MAX/MIN`, `LINE_IS_WHITE`, …).
+Set `LINE_IS_WHITE = False` for a black-line-on-white track.
+
+References: [Pololu QTR `readLine` behavior](https://www.pololu.com/docs/0J19/3) ·
+[Pololu 3pi line-following example](https://www.pololu.com/docs/0J21/7.b) ·
+[PID tuning guide (ThinkRobotics)](https://thinkrobotics.com/blogs/learn/pid-tuning-for-line-follower-robot-complete-how-to-guide) ·
+[PID tuning for speed competitions (Zbotic)](https://zbotic.in/pid-line-follower-robot-tuning-speed-competition/)
+
 ### How to drive it
 
 | Button | Action |
