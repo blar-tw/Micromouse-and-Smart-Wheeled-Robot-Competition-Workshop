@@ -39,7 +39,9 @@ Both run the same line-following logic (calibrate → normalize → weighted pos
 ├── slides/      Workshop presentation (PDF)
 ├── docs/        Hardware notes and I2C command table
 ├── arduino/     Way 2 — Arduino IDE line-following sketch + guide
-└── makecode/    Way 1 — MakeCode line follower + guide
+└── makecode/    Way 1 — MakeCode
+    ├── line_follower/   workshop algorithm (from slides + GitHub extension)
+    └── my_follower/     custom competition algorithm
 ```
 
 ## Quick Links

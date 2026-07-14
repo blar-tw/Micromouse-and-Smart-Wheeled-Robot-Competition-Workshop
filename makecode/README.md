@@ -5,6 +5,15 @@ sits on the car as the host controller and talks to the on-board MCU (ATSAMD21G1
 
 > Prefer text code / want to program the MCU directly? See [Way 2 — Arduino IDE](../arduino/README.md).
 
+## Two algorithms in here
+
+| Folder | What it is |
+|--------|-----------|
+| [`line_follower/`](line_follower/) | The **workshop algorithm** — rebuilt from the slides (p.35–43). TypeScript + Python. Start here. |
+| [`my_follower/`](my_follower/) | A **competition-style algorithm** written from scratch (PID + line-loss memory + adaptive speed). |
+
+Both reuse the same extension and the same setup below. Read this page first, then pick a folder.
+
 ## What you need
 
 - A micro:bit (V2 recommended) seated on the BitRacer Pro Max
@@ -36,55 +45,19 @@ Connect the micro:bit (plug in USB → `...` next to **Download** → **Connect 
 then **Download**. Move the middle sensor over the white line vs. the black surface — the number
 on the LED grid should change clearly. If it does, wiring + I2C + extension all work.
 
-Motor test (press A to nudge forward):
+## Step 2 — Load an algorithm
 
-```javascript
-input.onButtonPressed(Button.A, function () {
-    SmartCar.setMotor(SmartCar.MotorList.雙輪, 300)
-    basic.pause(500)
-    SmartCar.setMotor(SmartCar.MotorList.雙輪, 0)
-})
-```
+- **TypeScript** file → paste into the MakeCode **JavaScript** tab, then switch to **Blocks** (converts automatically).
+- **Python** file → paste into the MakeCode **Python** tab.
 
-## Step 2 — Load the full line follower
+(Blocks / JavaScript / Python are three views of one program.) Then **Download** to the micro:bit.
 
-Two versions of the same program — pick one (Blocks/JavaScript/Python are three views of one program):
+Go to the folder for the algorithm you want:
 
-- **TypeScript**: open [`line_follower.ts`](line_follower.ts), copy everything into the MakeCode
-  **JavaScript** tab, then switch back to **Blocks** — it converts automatically.
-- **Python**: open [`line_follower.py`](line_follower.py), copy everything into the MakeCode
-  **Python** tab. (This is *MakeCode Python*, not MicroPython — it only works inside MakeCode.
-  If any API name shows red there, the authoritative names come from pasting the `.ts` into the
-  JavaScript tab and switching to the Python tab.)
+- **[`line_follower/`](line_follower/README.md)** — the workshop version (recommended first)
+- **[`my_follower/`](my_follower/README.md)** — the competition version
 
-Then **Download** to the micro:bit.
-
-### Step 2b — Competition-style algorithm (optional upgrade)
-
-[`my_follower.py`](my_follower.py) is a from-scratch algorithm using techniques common in
-line-follower racing. Same A/B/A+B controls as the workshop version. What it adds:
-
-| Technique | Why |
-|-----------|-----|
-| Read all 7 sensors in **one** I2C transaction (`get_all_ir_values`) | 7× fewer bus transactions → faster control loop |
-| Position scale −2000..+2000 (Pololu `readLine` convention) | finer resolution than 5 discrete weights |
-| **Line-loss memory**: report full-scale position toward the last-seen side | PD naturally steers back to reacquire the line |
-| Full **PID** with anti-windup (KI defaults to 0) | add tiny KI only if the car consistently hugs one side |
-| **Adaptive speed**: slow in curves, full speed on straights | the main trick for fast lap times |
-| D-term low-pass filter | less jitter from sensor noise |
-| Lost-line timeout auto-stop (1.2 s) | safety |
-| Marker detection with **hysteresis** (>600 on, <400 off) | no double-counting from flicker |
-| Pressing B resets counters/PID state | workshop version would instantly stop on a second run |
-
-All tunables sit in the config block at the top (`KP/KI/KD`, `SPEED_MAX/MIN`, `LINE_IS_WHITE`, …).
-Set `LINE_IS_WHITE = False` for a black-line-on-white track.
-
-References: [Pololu QTR `readLine` behavior](https://www.pololu.com/docs/0J19/3) ·
-[Pololu 3pi line-following example](https://www.pololu.com/docs/0J21/7.b) ·
-[PID tuning guide (ThinkRobotics)](https://thinkrobotics.com/blogs/learn/pid-tuning-for-line-follower-robot-complete-how-to-guide) ·
-[PID tuning for speed competitions (Zbotic)](https://zbotic.in/pid-line-follower-robot-tuning-speed-competition/)
-
-### How to drive it
+## How to drive it (both algorithms)
 
 | Button | Action |
 |--------|--------|
@@ -93,31 +66,6 @@ References: [Pololu QTR `readLine` behavior](https://www.pololu.com/docs/0J19/3)
 | **A+B** | Stop |
 
 Typical run: place the car on the line → press **A** (calibrate over the line) → press **B** (it follows).
-
-The main loop uses a `校正模式` (mode) variable as a switch:
-mode 1 = calibrate, mode 2 = follow (sample → normalize → weight → `PD(250,350)` → finish check), mode 3 = stop.
-
-## Getting output (for tuning)
-
-In `line_follower.ts`, the `權重()` function has a commented line:
-
-```javascript
-// serial.writeValue("LinePOS", LinePOS)
-```
-
-Uncomment it, download, then click **Show data 裝置** below the simulator to see the track
-position live (stream + downloadable CSV). This tells you whether the car is wobbling or lagging.
-
-## Tuning knobs
-
-In `line_follower.ts`:
-
-| Where | Meaning |
-|-------|---------|
-| `PD(250, 350)` in the forever loop | `KP = 250` (correction strength), `KD = 350` (damping) |
-| `let bassSPD = 350` | base speed |
-
-Tuning method (symptom → fix table) is in [`../NOTE.md`](../NOTE.md).
 
 ## Notes / troubleshooting
 
