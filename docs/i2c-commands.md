@@ -1,33 +1,33 @@
-# BitRacer Pro Max I2C 命令表
+# BitRacer Pro Max I2C Command Table
 
-micro:bit（主控端）透過 I2C 對車體 MCU ATSAMD21G18（從端）下命令。
+The micro:bit (host) sends commands over I2C to the on-board MCU ATSAMD21G18 (slave).
 
-## 基礎命令
+## Basic Commands
 
-| 功能 | 命令編號 | 讀/寫 |
-|------|---------|-------|
-| 馬達左輪 | 0x20 | W |
-| 馬達右輪 | 0x21 | W |
-| 馬達雙輪 | 0x22 | W |
-| 讀取 IR-1 | 0x30 | R |
-| 讀取 IR-2 | 0x31 | R |
-| 讀取 IR-3 | 0x32 | R |
-| 讀取 IR-4 | 0x33 | R |
-| 讀取 IR-5 | 0x34 | R |
-| 讀取 IR-L | 0x35 | R |
-| 讀取 IR-R | 0x36 | R |
-| 控制 IR 開關 | 0x37 | W |
-| 讀取所有 IR | 0x38 | R |
+| Function | Command | R/W |
+|----------|---------|-----|
+| Motor left wheel | 0x20 | W |
+| Motor right wheel | 0x21 | W |
+| Motor both wheels | 0x22 | W |
+| Read IR-1 | 0x30 | R |
+| Read IR-2 | 0x31 | R |
+| Read IR-3 | 0x32 | R |
+| Read IR-4 | 0x33 | R |
+| Read IR-5 | 0x34 | R |
+| Read IR-L | 0x35 | R |
+| Read IR-R | 0x36 | R |
+| IR power switch | 0x37 | W |
+| Read all IR | 0x38 | R |
 
-## 周邊命令
+## Peripheral Commands
 
-| 功能 | 命令編號 | 讀/寫 |
-|------|---------|-------|
-| 讀取編碼器數值 | 0x40 | R |
-| 編碼器歸零 | 0x41 | W |
-| LED 控制 | 0x42 | W |
-| 讀取超音波距離 | 0x43 | R |
-| 顯示文字/數字（LCD） | 0x44 | W |
-| 清除畫面 | 0x45 | W |
-| 顯示圖片 | 0x46 | W |
-| 設定背景顏色 | 0x47 | W |
+| Function | Command | R/W |
+|----------|---------|-----|
+| Read encoder values | 0x40 | R |
+| Reset encoders to zero | 0x41 | W |
+| LED control | 0x42 | W |
+| Read ultrasonic distance | 0x43 | R |
+| Show text/number (LCD) | 0x44 | W |
+| Clear screen | 0x45 | W |
+| Show image | 0x46 | W |
+| Set background color | 0x47 | W |

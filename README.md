@@ -1,50 +1,51 @@
 # Micromouse & Smart Wheeled Robot Competition Workshop
 
-2026 TMIRC 暑期營 — 雙平台輪型機器人設計與應用（BitRacer Pro Max）
+2026 TMIRC Summer Camp — Dual-Platform Wheeled Robot Design & Application (BitRacer Pro Max)
 
-指導老師：蘇景暉、李炳輝｜BitRacer Pro Max 開發者：鄭力瑋（龍華科大）
+Instructors: Su Ching-Hui, Li Ping-Hui | BitRacer Pro Max developer: Cheng Li-Wei (Lunghwa University of Science and Technology)
 
-## 簡介
+## Overview
 
-BitRacer Pro Max 是針對 108 課綱與 STEM 教育設計的教學輪型機器人，
-採用「雙平台開發架構」：
+BitRacer Pro Max is an educational wheeled robot designed around Taiwan's 108 Curriculum
+and STEM education. It uses a **dual-platform development architecture**:
 
-- **MakeCode（圖形化積木）** — 適合入門學習者，micro:bit 作為主控端，透過 I2C 與車體 MCU（ATSAMD21G18）通訊
-- **Arduino IDE（文字程式）** — 直接開發車上的 ATSAMD21G18，適合進階學習者
+- **MakeCode (block-based)** — for beginners. The micro:bit acts as the host controller and
+  talks to the on-board MCU (ATSAMD21G18) over I2C.
+- **Arduino IDE (text-based)** — programs the on-board ATSAMD21G18 directly, for advanced learners.
 
-## 硬體規格
+## Hardware Specs
 
-| 項目 | 說明 |
-|------|------|
-| 微控制器 | ATSAMD21G18（車體）＋ micro:bit（上層主控） |
-| 馬達 | 直流馬達 ×2，TB6612FNG 驅動，四輪齒輪傳動 |
-| 感測器 | 紅外線反射感測器（VCNT2020）×5＋左右擴展 ×2 |
-| 測距 | HC-SR04P 超音波模組（擴充插槽） |
-| 編碼器 | 磁式編碼器（左右輪） |
-| 顯示 | 1.8 吋 TFT LCD（128×160, SPI） |
-| 其他 | 無源蜂鳴器、LED ×2、按鈕 ×2 |
-| 電源 | 14500 鋰電池，TP4056 充電 IC，MCP1826 LDO（3.3V） |
+| Item | Detail |
+|------|--------|
+| Microcontroller | ATSAMD21G18 (on-board) + micro:bit (upper-level host) |
+| Motors | 2× DC motors, TB6612FNG driver, four-wheel gear drive |
+| Sensors | 5× IR reflectance sensors (VCNT2020) + 2× left/right expansion |
+| Ranging | HC-SR04P ultrasonic module (expansion slot) |
+| Encoders | Magnetic encoders (left/right wheel) |
+| Display | 1.8" TFT LCD (128×160, SPI) |
+| Other | Passive buzzer, 2× LED, 2× buttons |
+| Power | 14500 Li-ion battery, TP4056 charging IC, MCP1826 LDO (3.3V) |
 
-## 儲存庫結構
+## Repository Structure
 
 ```
-├── slides/      研習簡報 PDF
-├── docs/        硬體說明與 I2C 命令表
-├── arduino/     Arduino IDE 循線範例程式（PD 控制）
-└── makecode/    MakeCode 擴展積木與範例連結
+├── slides/      Workshop presentation (PDF)
+├── docs/        Hardware notes and I2C command table
+├── arduino/     Arduino IDE line-following sample (PD control)
+└── makecode/    MakeCode extension blocks and example links
 ```
 
-## 快速連結
+## Quick Links
 
-- MakeCode 擴展積木（BitRacer Pro Max）：<https://github.com/CorgiQQQ/BitRacer_Pro_Max>
-- MakeCode 停車範例程式：<https://makecode.microbit.org/S92273-39996-50243-0737>
-- MakeCode 開發環境：<https://makecode.microbit.org/>
+- MakeCode extension blocks (BitRacer Pro Max): <https://github.com/CorgiQQQ/BitRacer_Pro_Max>
+- MakeCode parking example: <https://makecode.microbit.org/S92273-39996-50243-0737>
+- MakeCode environment: <https://makecode.microbit.org/>
 
-## 課程單元（MakeCode 積木單元化設計）
+## Course Units (MakeCode block modules)
 
-1. 發展環境 & 擴展積木
-2. 紅外線數值 & 正規化（歸一化）
-3. 賽道位置數據估測（加權平均）
-4. 比例差分（PD）回授控制
-5. 超音波距離監控
-6. 編碼器 & LCD 螢幕顯示
+1. Development environment & extension blocks
+2. IR values & normalization
+3. Track position estimation (weighted average)
+4. Proportional-Derivative (PD) feedback control
+5. Ultrasonic distance monitoring
+6. Encoder & LCD display

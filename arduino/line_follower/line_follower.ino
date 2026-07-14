@@ -1,8 +1,9 @@
-// BitRacer Pro Max 循線範例（Arduino IDE / ATSAMD21G18）
-// 2026 TMIRC 暑期營 - 雙平台輪型機器人設計與應用
-// 流程：按鈕啟動 → 旋轉取樣校正紅外線最大最小值 → PD 循線 → 偵測右側提示符號 2 次後停車
+// BitRacer Pro Max line-following example (Arduino IDE / ATSAMD21G18)
+// 2026 TMIRC Summer Camp - Dual-Platform Wheeled Robot Design & Application
+// Flow: button start -> rotate & sample to calibrate IR max/min -> PD line follow
+//       -> stop after passing the right-side marker twice (finish line)
 
-//------紅外線感測器控制-----//
+//------ IR sensor control -----//
 #define IR_1 A6
 #define IR_2 A5
 #define IR_3 A4
@@ -11,33 +12,33 @@
 #define IR_L A2
 #define IR_R A1
 #define IRcontrol 13
-//------LED&BUT控制-----//
-#define LED_R 30   // LED燈右邊
-#define LED_L 31   // LED燈左邊
-#define BUTTON 25  // 按鈕
-//-------馬達控制-----------//
-#define PWML 2    // 左邊馬達腳
-#define BIN_1 28  // 左邊馬達正反腳1
-#define BIN_2 29  // 左邊馬達正反腳2
-#define AIN_1 32  // 右邊馬達正反腳1
-#define AIN_2 33  // 右邊馬達正反腳2
-#define PWMR 3    // 右邊馬達腳
-//-------速度PD控制-----------//
+//------ LED & button control -----//
+#define LED_R 30   // right LED
+#define LED_L 31   // left LED
+#define BUTTON 25  // button
+//------- motor control -----------//
+#define PWML 2    // left motor PWM
+#define BIN_1 28  // left motor direction 1
+#define BIN_2 29  // left motor direction 2
+#define AIN_1 32  // right motor direction 1
+#define AIN_2 33  // right motor direction 2
+#define PWMR 3    // right motor PWM
+//------- speed PD control -----------//
 #define kp 100
 #define kd 200
 #define Basic_speed 100
-//-------陣列設置--------------//
-int IR[7] = { 0 };                                            // 紅外線初始值
-int IR_Max[7] = { 1, 1, 1, 1, 1, 1, 1 };                      // 紅外線最大初始值
-int IR_Min[7] = { 1023, 1023, 1023, 1023, 1023, 1023, 1023 }; // 紅外線最小初始值
-float IR_Nor[7] = { 0 };                                      // 紅外線正規化初始值
-//-------變數設置--------------//
+//------- arrays --------------//
+int IR[7] = { 0 };                                            // raw IR values
+int IR_Max[7] = { 1, 1, 1, 1, 1, 1, 1 };                      // IR max init values
+int IR_Min[7] = { 1023, 1023, 1023, 1023, 1023, 1023, 1023 }; // IR min init values
+float IR_Nor[7] = { 0 };                                      // normalized IR values
+//------- variables --------------//
 float x = 0, err = 0, ekd = 0, errold = 0;
 int pd = 0;
 int L_Cnt = 0, R_Cnt = 0;
 
 void setup() {
-  Serial.begin(9600);       // 設定傳輸鮑率
+  Serial.begin(9600);       // set baud rate
   pinMode(IR_1, INPUT);
   pinMode(IR_2, INPUT);
   pinMode(IR_3, INPUT);
@@ -48,10 +49,10 @@ void setup() {
   pinMode(LED_R, OUTPUT);
   pinMode(LED_L, OUTPUT);
   pinMode(BUTTON, INPUT);
-  digitalWrite(LED_R, HIGH);  // 關閉右邊LED燈
-  digitalWrite(LED_L, HIGH);  // 關閉左邊LED燈
+  digitalWrite(LED_R, HIGH);  // right LED off
+  digitalWrite(LED_L, HIGH);  // left LED off
 
-  // 等待按鈕按下後開始校正
+  // wait for button press, then start calibration
   while (digitalRead(BUTTON) != 0)
     ;
   delay(1000);
@@ -76,7 +77,7 @@ void loop() {
     while (1) {
       follow();
       prompt();
-      if (R_Cnt == 2) {  // 右側提示符號經過2次 → 終點
+      if (R_Cnt == 2) {  // right-side marker passed twice -> finish
         follow();
         delay(400);
         break;
@@ -89,15 +90,15 @@ void loop() {
 }
 
 void follow() {
-  Ir();       // 讀取紅外線
-  Nor();      // 歸一化
-  weights();  // 權重計算與PD控制
-  Print1();   // 視窗監控
+  Ir();       // read IR
+  Nor();      // normalize
+  weights();  // weight calc + PD control
+  Print1();   // serial monitor
 }
 
-void Ir()  // 讀取紅外線副程式
+void Ir()  // read IR sensors
 {
-  digitalWrite(IRcontrol, HIGH);  // 開啟紅外線
+  digitalWrite(IRcontrol, HIGH);  // turn IR on
   IR[6] = analogRead(IR_L);
   IR[0] = analogRead(IR_R);
   IR[3] = analogRead(IR_3);
@@ -105,10 +106,10 @@ void Ir()  // 讀取紅外線副程式
   IR[2] = analogRead(IR_2);
   IR[5] = analogRead(IR_5);
   IR[1] = analogRead(IR_1);
-  digitalWrite(IRcontrol, LOW);  // 關閉紅外線
+  digitalWrite(IRcontrol, LOW);  // turn IR off
 }
 
-void Maxmin()  // 最大最小值副程式
+void Maxmin()  // track max/min per sensor
 {
   Ir();
   for (int j = 0; j < 6; j++) {
@@ -121,7 +122,7 @@ void Maxmin()  // 最大最小值副程式
   }
 }
 
-void Nor()  // 歸一化副程式
+void Nor()  // normalization
 {
   for (int i = 0; i < 6; i++) {
     IR_Nor[i] = (1023.0 / (IR_Max[i] - IR_Min[i])) * (IR[i] - IR_Min[i]);
@@ -134,7 +135,7 @@ void Nor()  // 歸一化副程式
   }
 }
 
-void weights()  // 權重與PD控制
+void weights()  // weighted position + PD control
 {
   char mode = 'C';
   if (mode == 'C') {
@@ -149,7 +150,7 @@ void weights()  // 權重與PD控制
   Motor(Basic_speed - pd, Basic_speed + pd);
 }
 
-void Motor(int16_t PWM_L, int16_t PWM_R)  // 驅動馬達
+void Motor(int16_t PWM_L, int16_t PWM_R)  // drive motors
 {
   if (PWM_R >= 255) PWM_R = 255;
   else if (PWM_R <= -255) PWM_R = -255;
@@ -175,11 +176,11 @@ void Motor(int16_t PWM_L, int16_t PWM_R)  // 驅動馬達
   }
 }
 
-void prompt()  // 提示符號控制（賽道左右白色標記偵測）
+void prompt()  // detect left/right white markers on the track
 {
   static int L_status = 0, R_status = 0, C_status = 0;
   if (C_status == 0 && IR[1] > 600 && IR[3] > 600 && IR[5] > 600) {
-    // 路口（左中右同時偵測到白線）
+    // intersection (left, center, right all see white line)
     C_status = 1;
     digitalWrite(LED_L, LOW);
     digitalWrite(LED_R, LOW);
@@ -213,7 +214,7 @@ void prompt()  // 提示符號控制（賽道左右白色標記偵測）
   }
 }
 
-void Print1()  // 視窗監控副程式（需要時取消註解）
+void Print1()  // serial monitor (uncomment as needed)
 {
   // Serial.print(IR[1]); Serial.print(" \t ");
   // Serial.print(IR[2]); Serial.print(" \t ");
