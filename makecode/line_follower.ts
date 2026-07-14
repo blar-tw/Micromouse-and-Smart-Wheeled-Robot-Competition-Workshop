@@ -18,8 +18,8 @@
 //   SmartCar.setMotor(SmartCar.MotorList.左輪/右輪/雙輪, 速度)   速度 -1000~1000
 //   感測器索引：0~4 = IR-1~IR-5，5 = IR-L，6 = IR-R
 //
-// ⚠️ 起終點() 裡的 LED 積木先註解掉了（簡報有、但積木確切名稱要對一下擴展）。
-//    循線 + 終點停車不靠 LED 也能跑；確認 LED 積木名稱後再把那幾行打開。
+// LED 積木已對照擴展原始碼確認：SmartCar.setLED(SmartCar.LEDList.左邊/右邊/兩邊, on)
+// I2C 位址 = 0x10（正常用積木就好，不用自己寫 I2C）
 
 let 校正模式 = 0
 let 校正值 = [0, 0, 0, 0, 0, 0, 0]
@@ -132,25 +132,25 @@ function PD(KP: number, KD: number) {
 
 // ---- 起終點偵測：用兩側 IR-L(5) / IR-R(6) 數側邊白色標記，右側數到 2 次就停 ----
 function 起終點() {
-    // SmartCar.setLED(SmartCar.LEDList.兩邊, false)      // ← 確認 LED 積木名稱後可打開
+    SmartCar.setLED(SmartCar.LEDList.兩邊, false)
     if (校正值[0] > 3000 && 校正值[4] > 3000) {
         路口狀態 = 1
     } else if (校正值[5] > 3000 && 校正值[6] > 3000 && 路口狀態 == 1) {
-        // SmartCar.setLED(SmartCar.LEDList.兩邊, true)
+        SmartCar.setLED(SmartCar.LEDList.兩邊, true)
     } else {
         if (校正值[5] > 3000) {
             左提示符號狀態 = 1
         } else if (校正值[5] < 3000 && 左提示符號狀態 == 1) {
             左提示符號次數 += 1
             左提示符號狀態 = 0
-            // SmartCar.setLED(SmartCar.LEDList.左邊, true)
+            SmartCar.setLED(SmartCar.LEDList.左邊, true)
         }
         if (校正值[6] > 3000) {
             右提示符號狀態 = 1
         } else if (校正值[6] < 3000 && 右提示符號狀態 == 1) {
             右提示符號次數 += 1
             右提示符號狀態 = 0
-            // SmartCar.setLED(SmartCar.LEDList.右邊, true)
+            SmartCar.setLED(SmartCar.LEDList.右邊, true)
         }
         if (右提示符號次數 == 2) {
             校正模式 = 3
