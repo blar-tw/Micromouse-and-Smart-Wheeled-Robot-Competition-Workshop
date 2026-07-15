@@ -4,6 +4,14 @@
 
 Instructors: Su Ching-Hui, Li Ping-Hui | BitRacer Pro Max developer: Cheng Li-Wei (Lunghwa University of Science and Technology)
 
+## Demo
+![hardware](mouse.jpeg)
+overview of the mouse
+![arduino](arduino.gif)
+demo of arduino control
+![micro](micro.gif)
+demo of microbit control
+
 ## Overview
 
 BitRacer Pro Max is an educational wheeled robot designed around Taiwan's 108 Curriculum
