@@ -11,6 +11,7 @@ overview of the mouse
 ![micro](micro.gif)
 
 Left: arduino control version(around x1.2 speed)
+
 Right: microbit control version(around x1.2 speed)
 
 ## Overview
