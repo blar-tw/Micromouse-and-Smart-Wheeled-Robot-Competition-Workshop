@@ -68,3 +68,17 @@ Both run the same line-following logic (calibrate → normalize → weighted pos
 4. Proportional-Derivative (PD) feedback control
 5. Ultrasonic distance monitoring
 6. Encoder & LCD display
+
+## License
+
+**[MIT](LICENSE) — but scoped.** It covers only the original work here:
+`makecode/my_follower/`, `docs/`, and the READMEs.
+
+Course material is **not** licensed and may not be reused:
+
+- **[`slides/`](slides/)** — © the TMIRC instructors, all rights reserved. Personal course reference only.
+- **`arduino/line_follower.ino`** and **`makecode/line_follower/`** — derived from the workshop material.
+- The **[SmartCar extension](https://github.com/CorgiQQQ/BitRacer_Pro_Max)** is third-party, referenced by
+  URL only (not included here), and carries no license.
+
+See [LICENSE](LICENSE) for the full scope. Rights holders: open an issue and it will be handled.

@@ -42,7 +42,7 @@ micro:bit. This one cable powers, programs, and carries serial data.
 
 ## Step 3 — Open the sketch and select the port
 
-1. Open [`line_follower/line_follower.ino`](line_follower/line_follower.ino)
+1. Open [`line_follower.ino`](line_follower/line_follower.ino)
 2. **Tools → Port** → select the COM port that appeared
 
 ## Step 4 — Upload
