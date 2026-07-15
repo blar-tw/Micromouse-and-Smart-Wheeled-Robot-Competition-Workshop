@@ -7,10 +7,10 @@ Instructors: Su Ching-Hui, Li Ping-Hui | BitRacer Pro Max developer: Cheng Li-We
 ## Demo
 overview of the mouse
 ![hardware](mouse.jpeg)
-arduino control version(x1.2)
 ![arduino](arduino.gif)
 ![micro](micro.gif)
-microbit control version(x1.2)
+Left: arduino control version(around x1.2 speed)
+Right: microbit control version(around x1.2 speed)
 
 ## Overview
 
