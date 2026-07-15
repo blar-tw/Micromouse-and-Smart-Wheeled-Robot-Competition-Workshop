@@ -5,10 +5,10 @@
 Instructors: Su Ching-Hui, Li Ping-Hui | BitRacer Pro Max developer: Cheng Li-Wei (Lunghwa University of Science and Technology)
 
 ## Demo
-![hardware](mouse.jpeg)
 overview of the mouse
-![arduino](arduino.gif)
+![hardware](mouse.jpeg)
 demo of arduino control
+![arduino](arduino.gif)
 ![micro](micro.gif)
 demo of microbit control
 
