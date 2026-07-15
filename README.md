@@ -9,6 +9,7 @@ overview of the mouse
 ![hardware](mouse.jpeg)
 ![arduino](arduino.gif)
 ![micro](micro.gif)
+
 Left: arduino control version(around x1.2 speed)
 Right: microbit control version(around x1.2 speed)
 
