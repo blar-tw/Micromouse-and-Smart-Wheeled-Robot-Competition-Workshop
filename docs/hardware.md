@@ -86,3 +86,13 @@ D = t × 340 / 2   (t = round-trip time, speed of sound 340 m/s)
 ```
 d = (PL + PR) / 2 × (π × 23) / 32   (wheel diameter 23 mm, 32 pulses per revolution)
 ```
+
+## Design & Maintenance Notes
+
+- **Gear ratio** trades torque against top speed. On this chassis there is little room to
+  change it, so tune behavior in software (PD gains + speed) rather than the gearing.
+- **IR trade-off**: a lower IR reading means stronger reflected light. Driving the emitters
+  harder gives longer sensing range but draws more power — budget for it.
+- **Keep the wheels clean.** Grime on the tires kills traction; clean them, or add grip tape.
+- IR reflectance sensors mount on the **underside** of the wings, facing the track.
+- Precise track work (path memory, speed runs) relies on the **encoders**.

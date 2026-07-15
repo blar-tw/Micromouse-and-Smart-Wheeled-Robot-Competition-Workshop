@@ -49,7 +49,7 @@ unit-scale mistake.** This program's position scale is −2000..+2000 (1000 per 
 workshop's 1..5 (1 per spacing), so gains must be ~1000× smaller to be equivalent. `KD = 4.0` here
 equals ~4000 in workshop units (theirs: 350). The D-term amplified per-loop sensor noise into rapid
 alternating corrections that slammed the `CORR_MAX` clamp — bang-bang steering = vibration.
-(Matches the NOTE.md symptom table: "twitchy/jittery → KD too high".) Fixes: `KP` 0.35 → **0.25**
+(Matches the [pd-tuning](../../docs/pd-tuning.md) symptom table: "twitchy/jittery → KD too high".) Fixes: `KP` 0.35 → **0.25**
 (equivalent to the workshop's proven 250), `KD` 4.0 → **1.0** (~3× workshop damping, reasonable with
 the low-pass filter). Rule of thumb recorded in the code: **on this scale, KD +1 ≈ workshop +1000.**
 
@@ -59,7 +59,7 @@ the low-pass filter). Rule of thumb recorded in the code: **on this scale, KD +1
 2. Raise `KD` until the wobble is damped out
 3. Raise `SPEED_MAX` for speed; re-check `KP`/`KD` as it gets faster
 
-Full symptom → fix table is in [`../../NOTE.md`](../../NOTE.md). Enable the
+Full symptom → fix table is in [`../../docs/pd-tuning.md`](../../docs/pd-tuning.md). Enable the
 `serial.write_value("pos", pos)` line (in `on_forever`) and use **Show data 裝置** to watch position while tuning.
 
 ## References

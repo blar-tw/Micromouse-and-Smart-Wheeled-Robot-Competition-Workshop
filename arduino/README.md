@@ -75,7 +75,7 @@ At the top of `line_follower.ino`:
 | `#define kd 200` | derivative gain (damping) |
 | `#define Basic_speed 100` | base speed |
 
-Tuning method (symptom → fix table) is in [`../NOTE.md`](../NOTE.md).
+Tuning method (symptom → fix table) is in [`../docs/pd-tuning.md`](../docs/pd-tuning.md).
 
 ## Reference
 

@@ -42,7 +42,7 @@ Position is a weighted average of IR-1..IR-5 (center = 3), and steering is
 | `PD(250, 350)` in the forever loop | `KP = 250` (correction strength), `KD = 350` (damping) |
 | `bassSPD = 350` | base speed |
 
-Tuning method (symptom → fix table) is in [`../../NOTE.md`](../../NOTE.md).
+Tuning method (symptom → fix table) is in [`../../docs/pd-tuning.md`](../../docs/pd-tuning.md).
 
 ## Getting output (for tuning)
 
